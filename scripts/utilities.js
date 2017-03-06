@@ -7,10 +7,3 @@ function forEach(array, callback) {
         callback(array[i]);
     }
 }
-var pointsArray = document.getElementsByClassName('point');
-
-function pointsLoop(element) {
-    
-}
-
-pointsArray.forEach(pointsLoop)
