@@ -67,12 +67,16 @@ var setCurrentAlbum = function(album) {
 };
 
 var findParentByClassName = function(element, targetClass) {
-    if (element) {
+		if (element.target.parentElement === null) {
+			console.log("No parent found.");
+		} if (element.target.parentElement !== targetClass) {
+			console.log("No parent found with that class name.")
+		} if (element) {
         var currentParent = element.parentElement;
         while (currentParent.className !== targetClass && currentParent.className !== null) {
             currentParent = currentParent.parentElement;
         }
-        return currentParent;
+    	return currentParent;
     }
 };
 
@@ -95,7 +99,7 @@ var getSongItem = function(element) {
 };
 
 var clickHandler = function(targetElement) {
-	
+
 	var songItem = getSongItem(targetElement);
 	
 	if (currentlyPlayingSong === null) {
