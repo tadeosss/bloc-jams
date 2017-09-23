@@ -29,7 +29,7 @@ var createSongRow = function(songNumber, songName, songLength) {
 			$(this).html(playButtonTemplate);
 			$('.main-controls .play-pause').html(playerBarPlayButton);
 			currentlyPlayingSongNumber = null;
-			currentSongFromAlbum = null;
+    	currentSongFromAlbum = null;
 		}
 	};
 	
@@ -49,7 +49,6 @@ var createSongRow = function(songNumber, songName, songLength) {
       if (songNumber !== currentlyPlayingSongNumber) {
           songNumberCell.html(songNumber);
       }
-      //console.log("songNumber type is " + typeof songNumber + "\n and currentlyPlayingSongNumber type is " + typeof currentlyPlayingSongNumber);
   };
   
   $row.find('.song-item-number').click(clickHandler);
@@ -58,8 +57,8 @@ var createSongRow = function(songNumber, songName, songLength) {
 };
 
 var setCurrentAlbum = function(album) {
-	// Select all HTML elements to display album page
 	currentAlbum = album;
+	// Select all HTML elements to display album page
 	var $albumTitle = $('.album-view-title');
 	var $albumArtist = $('.album-view-artist');
   var $albumReleaseInfo = $('.album-view-release-info');
@@ -85,32 +84,30 @@ var setCurrentAlbum = function(album) {
 var trackIndex = function(album, song) {
    return album.songs.indexOf(song);
 };
-
+ 
 var updatePlayerBarSong = function() {
-
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
-		$('.main-controls .play-pause').html(playerBarPauseButton);
+    $('.main-controls .play-pause').html(playerBarPauseButton);
 };
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 var playerBarPlayButton = '<span class="ion-play"></span>';
 var playerBarPauseButton = '<span class="ion-pause"></span>';
-
+ 
 // Store state of playing songs
 var currentAlbum = null;
 var currentlyPlayingSongNumber = null;
 var currentSongFromAlbum = null;
-
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
- 
+
 	$(document).ready(function() {
-	setCurrentAlbum(albumPicasso);
-	$previousButton.click(previousSong);
-  $nextButton.click(nextSong);
+		setCurrentAlbum(albumPicasso);
+		$previousButton.click(previousSong);
+	  $nextButton.click(nextSong);
 });
 
 var nextSong = function() {
