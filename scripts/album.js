@@ -1,11 +1,27 @@
 // creates variable setSong equal to function declaration with parameter songNumber
 var setSong = function(songNumber) {
+	//to prevent concurrent playback; stop current song before playing a new one
+	if (currentSoundFile) {
+		currentSoundFile.stop();
+	}
 	//currentlyPlayingSongNumber is equal to the parameter songNumber that is parsed as an integer
 	currentlyPlayingSongNumber = parseInt(songNumber);
 	//currentSongFromAlbum is equal to the songs in the currentAlbum object that has an index of songNumber - 1
 	currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
-}
+	//assign a new buzz sound object; pass the audio file via audioUrl property from currentSongFromAlbum object
+	currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+		formats: [ 'mp3'], //property of the object with settings of acceptable audio formats as an array
+		preload: true //property of the object with settings that allows Buzz to load the mp3s as soon as the page loads
+	});
 
+	setVolume(currentVolume);
+};
+
+var setVolume = function(volume) {
+	if (currentSoundFile) {
+		currentSoundFile.setVolume(volume);
+	}
+};
 // Example
 //  var currentAlbum = {
 // 	foo: 'bar',
@@ -49,23 +65,31 @@ var createSongRow = function(songNumber, songName, songLength) {
 		//'this' refers to the current song number
 		var songNumber = parseInt($(this).attr('data-song-number'));
 		//conditional statement referring to the setSong function, if setSong is not null or empty then perform action on the block of code within
-		if (setSong !== null) {
+		if (currentlyPlayingSongNumber !== null) {
 			// Revert to song number for currently playing song because user started playing new song.
-			var currentlyPlayingCell = getSongNumberCell(setSong);
+			var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
 
-			currentlyPlayingCell.html(setSong);
+			currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+			currentlyPlayingCell.html(currentlyPlayingSongNumber);
 		}
-		if (setSong !== songNumber) {
+		if (currentlyPlayingSongNumber !== songNumber) {
 			// Switch from Play -> Pause button to indicate new song is playing.
+			setSong(songNumber);
+			currentSoundFile.play(); //implement play behavior
 			$(this).html(pauseButtonTemplate);
-			setSong(songNumber)
+			currentlyPlayingSongNumber = songNumber;
+			currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
 			updatePlayerBarSong();
-		} else if (setSong === songNumber) {
-			// Switch from Pause -> Play button to pause currently playing song.
-			$(this).html(playButtonTemplate);
-			$('.main-controls .play-pause').html(playerBarPlayButton);
-			setSong = null;
-    	currentSongFromAlbum = null;
+		} else if (currentlyPlayingSongNumber === songNumber) {
+			if (currentSoundFile.isPaused()) { //conditional to check if current sound file is paused
+				$(this).html(pauseButtonTemplate);
+				$('.main-controls .play-pause').html(playerBarPauseButton); //revert icon in song row and player bar to the pause button
+				currentSoundFile.play(); //start playing song again
+			} else { //if it is not paused
+				$(this).html(playButtonTemplate);
+				$('.main-controls .play-pause').html(playerBarPauseButton); //set content of the song number cell and player bar's pause button back to play button
+				currentSoundFile.pause(); //pause the song
+			}
 		}
 	};
 	//creates a function that is stored in variable called 'onHover' that takes parameter called event
@@ -73,7 +97,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       var songNumberCell = $(this).find('.song-item-number');
       var songNumber = parseInt(songNumberCell.attr('data-song-number'));
 
-      if (songNumber !== setSong) {
+      if (songNumber !== currentlyPlayingSongNumber) {
           songNumberCell.html(playButtonTemplate);
       }
   };
@@ -82,7 +106,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       var songNumberCell = $(this).find('.song-item-number');
       var songNumber = parseInt(songNumberCell.attr('data-song-number'));
 
-      if (songNumber !== setSong) {
+      if (songNumber !== currentlyPlayingSongNumber) {
           songNumberCell.html(songNumber);
       }
   };
@@ -151,7 +175,8 @@ var nextSong = function() {
 	var lastSongNumber = setSong;
 
 	// Set a new current song
-	setSong = currentSongIndex + 1;
+	setSong(currentSongIndex + 1);
+	currentSoundFile.play();
 	currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
 	// Update the Player Bar information
@@ -177,7 +202,8 @@ var previousSong = function() {
     var lastSongNumber = setSong;
 
     // Set a new current song
-    setSong = currentSongIndex + 1;
+    setSong(currentSongIndex + 1);
+		currentSoundFile.play();
     currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
     // Update the Player Bar information
@@ -197,10 +223,12 @@ var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause">
 var playerBarPlayButton = '<span class="ion-play"></span>';
 var playerBarPauseButton = '<span class="ion-pause"></span>';
 
-// Store state of playing songs
+// Global variables to store state of playing songs
 var currentAlbum = null;
-var setSong = null;
+var currentlyPlayingSongNumber = null;
 var currentSongFromAlbum = null;
+var currentSoundFile = null; //used to store the sound object when a new current song is set
+var currentVolume = 80; //used to handle methods for volume with set initial value to 80
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
