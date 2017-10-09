@@ -26,7 +26,7 @@ var getSongNumberCell = function(number) {
 
 // Function to generate song row content that is stored in variable called createSongRow
 var createSongRow = function(songNumber, songName, songLength) {
-	//creates a variable called template
+	//the function above creates a variable called template where it assigns static song row template
 	var template =
 	//a template for a song row is created using the following that consists of table rows and columns
 	//a table row is classified as a class called album-view-song-item
@@ -46,12 +46,13 @@ var createSongRow = function(songNumber, songName, songLength) {
   //creates a function that can take parameters that is stored in variable called clickHandler
 	var clickHandler = function() {
 		//attribute called data-song-number is passed in as parameter(s) that is parsed as integer which is stored into a variable called songNumber
-		//what is 'this' referring to?
+		//'this' refers to the current song number
 		var songNumber = parseInt($(this).attr('data-song-number'));
-		//if statement referring to the setSong function, if setSong is not null or empty
+		//conditional statement referring to the setSong function, if setSong is not null or empty then perform action on the block of code within
 		if (setSong !== null) {
 			// Revert to song number for currently playing song because user started playing new song.
 			var currentlyPlayingCell = getSongNumberCell(setSong);
+
 			currentlyPlayingCell.html(setSong);
 		}
 		if (setSong !== songNumber) {
@@ -67,7 +68,7 @@ var createSongRow = function(songNumber, songName, songLength) {
     	currentSongFromAlbum = null;
 		}
 	};
-
+	//creates a function that is stored in variable called 'onHover' that takes parameter called event
   var onHover = function(event) {
       var songNumberCell = $(this).find('.song-item-number');
       var songNumber = parseInt(songNumberCell.attr('data-song-number'));
@@ -76,7 +77,7 @@ var createSongRow = function(songNumber, songName, songLength) {
           songNumberCell.html(playButtonTemplate);
       }
   };
-
+	//creates a function that is stored in variable called 'offHover' that takes in parameter called event
   var offHover = function(event) {
       var songNumberCell = $(this).find('.song-item-number');
       var songNumber = parseInt(songNumberCell.attr('data-song-number'));
@@ -88,7 +89,7 @@ var createSongRow = function(songNumber, songName, songLength) {
 
   $row.find('.song-item-number').click(clickHandler);
   $row.hover(onHover, offHover);
-	//it returns the song row template
+	//it returns the song row template (to where?)
   return $row;
 };
 
@@ -96,13 +97,19 @@ var createSongRow = function(songNumber, songName, songLength) {
 var setCurrentAlbum = function(album) {
 	currentAlbum = album;
 	// Select all HTML elements to display album page
+	//stores the value of album view title to variable called albumTitle
 	var $albumTitle = $('.album-view-title');
+	//stores the value of album view artist to variable called albumArtist
 	var $albumArtist = $('.album-view-artist');
+	//stores the value of album view release info to variable called albumReleaseInfo
   var $albumReleaseInfo = $('.album-view-release-info');
+	//stores the value of album cover art to variable called albumImage
   var $albumImage = $('.album-cover-art');
+	//stores the value of album view song list to variable called albumSongList
   var $albumSongList = $('.album-view-song-list');
 
 	// firstchild = first child node of element; nodeValue = sets value of node
+	//converts classes into texts (string values?)
 	$albumTitle.text(album.title);
   $albumArtist.text(album.artist);
   $albumReleaseInfo.text(album.year + ' ' + album.label);
@@ -117,12 +124,14 @@ var setCurrentAlbum = function(album) {
     $albumSongList.append($newRow);
 	}
 };
-
+//function that takens in two parameters called album and song, stored in variable called trackIndex
 var trackIndex = function(album, song) {
+	//the block returns the index of the song parameter from the song in the album
    return album.songs.indexOf(song);
 };
-
+//function that takes parameter(s) that is stored into a variable called updatePlayerBarSong
 var updatePlayerBarSong = function() {
+		//passes in parameters and converts them into string?
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
