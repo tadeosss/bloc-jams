@@ -37,7 +37,7 @@ var setVolume = function(volume) {
 //creates variable called getSongNumberCell to equal function declaration with parameter of number
 var getSongNumberCell = function(number) {
 	//function returns the song-item-number class that has the data-song-number with appended number of the song
-	return $('.song-item-number[data-song-number="' + number + '"]');
+	return $('.song-item-number[data-song-number="' + number + '"]');  //'.song-item-number[data-song-number="4"]'
 };
 
 // Function to generate song row content that is stored in variable called createSongRow
@@ -69,7 +69,6 @@ var createSongRow = function(songNumber, songName, songLength) {
 			// Revert to song number for currently playing song because user started playing new song.
 			var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
 
-			currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
 			currentlyPlayingCell.html(currentlyPlayingSongNumber);
 		}
 		if (currentlyPlayingSongNumber !== songNumber) {
