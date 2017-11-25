@@ -121,7 +121,10 @@
    cursor: pointer;
    -webkit-transition: all 100ms ease-in-out;
       -moz-transition: all 100ms ease-in-out;
-           transition: all 100ms ease-in-out;
+      transition: width 100ms ease-in-out,
+                  height 100ms ease-in-out,
+                  margin-top 100ms ease-in-out,
+                  margin-left 100ms ease-in-out;
 }
 
 .seek-bar:hover .thumb {
@@ -135,7 +138,7 @@
    width: 25%;
    text-align: right;
 }
- 
+
 .player-bar .volume .icon {
    font-size: 1.1rem;
    display: inline-block;
@@ -148,7 +151,7 @@
    vertical-align: middle;
 }
 
- 
+
 @media (max-width: 640px) {
    .player-bar {
        padding: 1rem;
@@ -164,16 +167,16 @@
        width: 100%;
        text-align: center;
    }
-   
+
    .player-bar .main-controls,
    .player-bar .volume {
        min-height: 3.5rem;
    }
-   
+
    .player-bar .currently-playing {
        min-height: 2.5rem;
    }
-    
+
    .player-bar .artist-name,
    .player-bar .song-name {
        display: none;
